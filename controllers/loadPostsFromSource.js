@@ -38,15 +38,23 @@ module.exports = async function(source) {
     if(!originPostList) return null
 
     const formattedPostList = originPostList.map(post => {
-        return {
-            pubDate: handle.extractPostPubDate(post),
-            sourceName: source.name,
-            title: handle.extractPostTitle(post),
-            description: handle.extractPostDescription(post),
-            link: handle.extractPostLink(post),
-            img: handle.extractPostImgLink(post),
+        try {
+            return {
+                pubDate: handle.extractPostPubDate(post),
+                sourceName: source.name,
+                title: handle.extractPostTitle(post),
+                description: handle.extractPostDescription(post),
+                link: handle.extractPostLink(post),
+                img: handle.extractPostImgLink(post),
+            }   
+        }
+        catch (error) {
+            console.log('...Проблемы с форматированием поста');
+            return null;
         }
     });
+
+    if(!formattedPostList) return null
 
     const cleanPostList = handle.separateNullPosts(formattedPostList);
 
